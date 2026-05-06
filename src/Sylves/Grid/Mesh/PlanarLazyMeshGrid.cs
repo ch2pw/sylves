@@ -197,8 +197,10 @@ namespace Sylves
                         v1 += t;
                         v2 += t;
                     }
+                    var v1snap = edgeStore.SnapVertex(v1);
+                    var v2snap = edgeStore.SnapVertex(v2);
                     // This is nasty, it is *mutating* cached data.
-                    edgeStore.MatchEdge(v1, v2, c, dir, dataDrivenData.Moves, clearEdge: false);
+                    edgeStore.MatchEdge(v1snap, v2snap, c, dir, dataDrivenData.Moves, clearEdge: false);
                 }
             }
 

@@ -92,6 +92,11 @@ namespace Sylves
         {
             var vertices = data.vertices;
             var edgeStore = new EdgeStore(meshGridOptions.Tolerance);
+            var vertexSnaps = new int[vertices.Length];
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                vertexSnaps[i] = edgeStore.SnapVertex(vertices[i]);
+            }
 
             for (var submesh = 0; submesh < data.subMeshCount; submesh++)
             {
@@ -111,14 +116,14 @@ namespace Sylves
                         else
                         {
                             var cellDir = EdgeIndexToCellDir(indexCount - 1, faceIndices.Count, meshGridOptions.DoubleOddFaces);
-                            edgeStore.AddEdge(vertices[prev], vertices[index], new Cell(face, submesh), cellDir, moves);
+                            edgeStore.AddEdge(vertexSnaps[prev], vertexSnaps[index], vertices[prev], vertices[index], new Cell(face, submesh), cellDir, moves);
                             prev = index;
                         }
                         indexCount++;
                     }
                     {
                         var cellDir = EdgeIndexToCellDir(indexCount - 1, faceIndices.Count, meshGridOptions.DoubleOddFaces);
-                        edgeStore.AddEdge(vertices[prev], vertices[first], new Cell(face, submesh), cellDir, moves);
+                        edgeStore.AddEdge(vertexSnaps[prev], vertexSnaps[first], vertices[prev], vertices[first], new Cell(face, submesh), cellDir, moves);
                     }
                     face++;
                 }

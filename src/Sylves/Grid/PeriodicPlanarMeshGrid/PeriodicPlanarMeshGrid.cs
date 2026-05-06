@@ -65,7 +65,9 @@ namespace Sylves
                     v1 += chunkOffset;
                     v2 += chunkOffset;
                     cell += new Vector3Int(0, chunk.x, chunk.y);
-                    edgeStore.MatchEdge(v1, v2, cell, dir, dataDrivenData.Moves);
+                    var v1snap = edgeStore.SnapVertex(v1);
+                    var v2snap = edgeStore.SnapVertex(v2);
+                    edgeStore.MatchEdge(v1snap, v2snap, cell, dir, dataDrivenData.Moves);
                 }
             }
 
