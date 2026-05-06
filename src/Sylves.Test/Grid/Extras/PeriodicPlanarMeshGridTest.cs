@@ -65,6 +65,13 @@ namespace Sylves.Test
         }
 
         [Test]
+        public void TestFindCell_GreekCross()
+        {
+            var g = new GreekCrossGrid();
+            GridTest.FindCell(g, new Cell(0, 0, 0));
+        }
+
+        [Test]
         public void TestFindCell_MetaHexagon()
         {
             var g = new MetaHexagonGrid();

@@ -460,6 +460,10 @@ namespace Sylves.Test
                 new RhombilleGrid().BoundBy(new SquareBound(new Vector2Int(-3, -3), new Vector2Int(4, 4))).Transformed(Matrix4x4.Scale(2f * Vector3.one)),
                 "rhombille.svg",
                 new Options { textScale = 0.5 });
+            Export(
+                new GreekCrossGrid().BoundBy(new SquareBound(new Vector2Int(-3, -3), new Vector2Int(4, 4))),
+                "greekcross.svg",
+                new Options { textScale = 0.5 });
             var r = new System.Random(0);
             var points = Enumerable.Range(0, 100).Select(x => new Vector2((float)r.NextDouble(), (float)r.NextDouble()) * 10).ToList();
             Export(
