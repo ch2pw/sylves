@@ -285,10 +285,6 @@ namespace Sylves
             }
             public override (Cell dualCell, CellCorner inverseCorner)? ToDualPair(Cell baseCell, CellCorner corner)
             {
-                if(baseCell == new Cell(623,0,-7) && (int)corner == 2)
-                {
-                    baseCell = baseCell;
-                }
                 var (uCell, layer) = baseGrid.Split(baseCell);
                 var underlyingCellType = baseGrid.underlying.GetCellType(uCell);
                 var prismInfo = PrismInfo.Get(underlyingCellType);
