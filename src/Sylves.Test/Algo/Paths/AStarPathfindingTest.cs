@@ -38,5 +38,22 @@ namespace Sylves.Test
             var path = pf.ExtractPathTo(dest);
             Assert.AreEqual(6.0f, path.Length);
         }
+
+        [Test]
+        public void TestRepeatedRunSameOrigin()
+        {
+            var g = new SquareGrid(1);
+            var pf = new AStarPathfinding(g, new Cell(), StepLengths.Uniform, _ => 0f);
+            var pathSteps = new List<Step>();
+
+            pf.Run(new Cell(2, 2));
+            Assert.IsTrue(pf.ExtractPathTo(new Cell(2, 2), pathSteps));
+            Assert.AreEqual(4, pathSteps.Sum(s => s.Length));
+
+            pf.Run(new Cell(1, 0));
+            Assert.IsTrue(pf.ExtractPathTo(new Cell(1, 0), pathSteps));
+            Assert.AreEqual(1, pathSteps.Sum(s => s.Length));
+            Assert.IsFalse(pf.ExtractPathTo(new Cell(2, 2), pathSteps));
+        }
     }
 }

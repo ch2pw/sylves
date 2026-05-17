@@ -16,10 +16,11 @@ namespace Sylves
         Func<Step, float?> stepLengths;
         Func<Cell, float> heuristic;
 
-        // Internal data
-        Dictionary<Cell, float> distances = new Dictionary<Cell, float>();
-        Dictionary<Cell, float> fScores = new Dictionary<Cell, float>();
-        Dictionary<Cell, Step> steps = new Dictionary<Cell, Step>();
+        // Internal data (retained between Run calls to reduce allocations)
+        readonly Heap<Cell, float> heap = new Heap<Cell, float>();
+        readonly Dictionary<Cell, float> distances = new Dictionary<Cell, float>();
+        readonly Dictionary<Cell, float> fScores = new Dictionary<Cell, float>();
+        readonly Dictionary<Cell, Step> steps = new Dictionary<Cell, Step>();
 
         public AStarPathfinding(IGrid grid, Cell src, Func<Step, float?> stepLengths, Func<Cell, float> heuristic)
         {
@@ -31,7 +32,11 @@ namespace Sylves
 
         public void Run(Cell target)
         {
-            var heap = new Heap<Cell, float>();
+            heap.Clear();
+            distances.Clear();
+            fScores.Clear();
+            steps.Clear();
+
             heap.Insert(src, 0);
             distances[src] = 0;
             fScores[src] = heuristic(src);
@@ -74,12 +79,26 @@ namespace Sylves
 
         public CellPath ExtractPathTo(Cell target)
         {
-            if (target != src && !steps.ContainsKey(target))
+            var pathSteps = new List<Step>();
+            if (!ExtractPathTo(target, pathSteps))
             {
                 return null;
             }
+            return new CellPath { Steps = pathSteps };
+        }
 
-            var pathSteps = new List<Step>();
+        /// <summary>
+        /// Writes the path to <paramref name="pathSteps"/> (after clearing it).
+        /// Returns false if there is no path to the target.
+        /// </summary>
+        public bool ExtractPathTo(Cell target, List<Step> pathSteps)
+        {
+            pathSteps.Clear();
+            if (target != src && !steps.ContainsKey(target))
+            {
+                return false;
+            }
+
             var cell = target;
             while (cell != src)
             {
@@ -88,7 +107,7 @@ namespace Sylves
                 cell = step.Src;
             }
             pathSteps.Reverse();
-            return new CellPath { Steps = pathSteps };
+            return true;
         }
 
     }
